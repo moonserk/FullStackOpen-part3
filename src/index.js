@@ -1,8 +1,10 @@
 const express = require('express');
-
+const morgan = require('morgan');
 const app = express();
 
-app.use(express.json())
+app.use(express.json());
+app.use(morgan('combined'));
+
 let persons = [
     {
       "name": "Arto Hellas",
@@ -25,6 +27,7 @@ let persons = [
       "id": 4
     }
 ];
+
 
 app.get("/info", (req, res) => {
     res.send(`<p>Phonebook has info for ${persons.length} people</p><p>${Date()}</p>`)
