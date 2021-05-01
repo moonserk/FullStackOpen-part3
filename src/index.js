@@ -36,10 +36,23 @@ app.get("/api/persons", (req, res) => {
 
 app.post("/api/persons", (req, res) => {
     const person = req.body
-    console.log(person)
+
+    if(!person.name || !person.number){
+        return res.status(400).json({
+            error: 'The name or number is missing'
+        })
+    }
+
+    const samePerson = persons.find(p => p.name === person.name)
+    if(samePerson){
+        return res.status(400).json({
+            error: 'The name already exists in the phonebook'
+        })
+    }
+
     person.id = Math.floor(Math.random() * 10000000000000);
     persons = persons.concat(person)
-    console.log(person)
+
     res.json(person)
 })
 
