@@ -25,7 +25,7 @@ switch(process.argv.length){
             result.forEach(person => {
                 console.log(`${person.name} ${person.number}`)
             })
-            mongoose.connection.close();
+            mongoose.connecton.close();
         });
         break;
     case 5:
