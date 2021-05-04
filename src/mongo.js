@@ -11,6 +11,7 @@ const url = `mongodb+srv://fullstackopen-phonebook:${password}@cluster0.cm2nm.mo
 
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 
+
 const personSchema = new mongoose.Schema({
     name: String,
     number: String

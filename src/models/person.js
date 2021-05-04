@@ -13,8 +13,15 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFind
         });
 
 const personSchema = new mongoose.Schema({
-    name: { type: String, required: true, unique: true },
-    number: { type: String, required: true}
+    name: { type: String, minlength: 3, required: true, unique: true },
+    number: { type: Number, minlength: 8,
+              validate: {
+                  validator: function(v) {
+                      return /\d{8}/.test(v);
+                  },
+                  message: props => `${props.value} is not a valid phone number`
+              },
+              required: true}
 })
 
 personSchema.plugin(uniqueValidator)

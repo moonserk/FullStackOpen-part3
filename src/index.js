@@ -23,7 +23,7 @@ const errorHandler = (error, req, res, next) => {
     if (error.name === 'CastError') {
         return res.status(400).send({error: 'malformed id'})
     } else if (error.name === 'ValidationError') {
-        return res.status(400).send({error: 'name must be unique'})
+        return res.status(400).send({error: error.message})
     }
 
     next(error);
@@ -105,7 +105,7 @@ app.put("/api/persons/:id", (req, res, next) => {
         number: body.number
     }
 
-    Person.findByIdAndUpdate(req.params.id, person, { new: true })
+    Person.findOneAndUpdate({_id: req.params.id}, person, { new: true } )
           .then(updatedPerson => {
               res.json(updatedPerson)
           })
