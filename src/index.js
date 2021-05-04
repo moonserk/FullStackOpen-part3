@@ -18,13 +18,14 @@ app.use(cors());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :obj'));
 
 const errorHandler = (error, req, res, next) => {
-    console.error("ERROR", error.name, error.message)
+    console.error(error.name, error.message)
 
     if (error.name === 'CastError') {
-        
         return res.status(400).send({error: 'malformed id'})
+    } else if (error.name === 'ValidationError') {
+        return res.status(400).send({error: 'name must be unique'})
     }
-    console.log("WTF")
+
     next(error);
 }
 
@@ -42,7 +43,7 @@ app.get("/" , (req, res) => {
 app.get("/info", (req, res, next) => {
     Person.find({}).then(persons => {
         res.send(`<p>Phonebook has info for ${persons.length} people</p><p>${Date()}</p>`)
-    }).catch(error => next(error))
+    }).catch(error =>  next(error))
 });
 
 app.get("/api/persons", (req, res, next) => {
@@ -53,10 +54,6 @@ app.get("/api/persons", (req, res, next) => {
 
 app.post("/api/persons", (req, res, next) => {
     const person = req.body
-    console.log(person)
-    if(person.name === undefined){
-        return res.status(400).json({error: 'content missing'})
-    }
 
     const newPerson = new Person({
         name: person.name,
